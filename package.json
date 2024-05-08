@@ -11,11 +11,21 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.17",
+    "@mui/styles": "^5.15.17",
     "antd": "^5.17.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "mongoose": "^8.3.4",
     "nodemon": "^3.1.0",
-    "socket.io": "^4.7.5"
+    "react-copy-to-clipboard": "^5.1.0",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0"
   }
 }
