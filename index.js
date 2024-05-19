@@ -1,8 +1,10 @@
 const app = require("express")();
 const server = require("http").createServer(app);
 const cors = require("cors");
+const ngrok = require('ngrok')
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const FormDataModel = require ('./models/FormData');
 
 const io = require("socket.io")(server, {
@@ -14,12 +16,22 @@ const io = require("socket.io")(server, {
 
 app.use(express.json());
 app.use(cors());
-mongoose.connect('mongodb://127.0.0.1:27017/practice_mern');
+dotenv.config();
+const URL = process.env.MONGOURL;
+const PORT = process.env.PORT || 8000;
+// mongoose.connect('mongodb://127.0.0.1:27017/practice_mern');
+// mongoose.connect('mongodb://127.0.0.1:27017/vid');
+mongoose.connect(URL)
+  .then(() => {
+    console.log('DB connected');
+  })
+  .catch((error) => {
+    console.log('DB connection error', error);
+  });
 
-const PORT = process.env.PORT || 5000;
 
+// const PORT = 5001
 app.post('/register', (req, res)=>{
-    // To post / insert data into database
 
     const {email, password} = req.body;
     FormDataModel.findOne({email: email})
@@ -36,13 +48,11 @@ app.post('/register', (req, res)=>{
     
 })
 
-app.post('/', (req, res)=>{
-    // To find record from the database
+app.post('/login', (req, res)=>{
     const {email, password} = req.body;
     FormDataModel.findOne({email: email})
     .then(user => {
         if(user){
-            // If user found then these 2 cases
             if(user.password === password) {
                 res.json("Success");
             }
@@ -50,7 +60,6 @@ app.post('/', (req, res)=>{
                 res.json("Wrong password");
             }
         }
-        // If user not found then 
         else{
             res.json("No records found! ");
         }
@@ -78,3 +87,14 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(3001, () => {
+    console.log('Server listining on 3001');
+
+});
+
+ngrok.connect(PORT).then(ngrokUrl=>{
+    console.log(`Ngrok tunnel in: ${ngrokUrl}`);
+}).catch(error=>{
+    console.log(`Ngrok tunnel error: ${error}`);
+})
+
