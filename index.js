@@ -9,7 +9,7 @@ const FormDataModel = require ('./models/FormData');
 
 const io = require("socket.io")(server, {
 	cors: {
-		origin: "https://6dc1-2405-201-e016-314b-7091-c87f-7991-32b.ngrok-free.app",
+		origin: "",
 		methods: [ "GET", "POST" ],
         credentials: true
 	}
@@ -93,9 +93,9 @@ app.listen(3001, () => {
     console.log('Server listining on 3001');
 });
 
-ngrok.connect(3002).then(ngrokUrl=>{
-    console.log(`Ngrok tunnel in: ${ngrokUrl}`);
-}).catch(error=>{
-    console.log(`Ngrok tunnel error: ${error}`);
-})
+// ngrok.connect(3002).then(ngrokUrl=>{
+//     console.log(`Ngrok tunnel in: ${ngrokUrl}`);
+// }).catch(error=>{
+//     console.log(`Ngrok tunnel error: ${error}`);
+// })
 
