@@ -8,15 +8,35 @@ const dotenv = require('dotenv');
 const FormDataModel = require('./models/FormData');
 
 // Add the URL for CORS
-const allowedOrigins = ["https://ablelyf-video.netlify.app"]; // Add more origins if needed
+const allowedOrigins = ["https://ablelyf-video.netlify.app"];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}));
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: allowedOrigins, // Use the array of allowed origins
+        origin: allowedOrigins,
         methods: ["GET", "POST"],
-        credentials: true
-    }
+        credentials: true,
+    },
 });
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://ablelyf-video.netlify.app");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+});
+
 
 app.use(express.json());
 app.use(cors({
